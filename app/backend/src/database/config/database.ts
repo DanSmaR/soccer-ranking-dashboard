@@ -14,4 +14,4 @@ const config: Options = {
   logging: false,
 }
 
-module.exports = config;
+export = config;
