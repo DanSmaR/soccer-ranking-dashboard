@@ -1,4 +1,5 @@
 import { ENUM, INTEGER, Model, STRING } from 'sequelize';
+import * as bcrypt from 'bcryptjs';
 import db from '.';
 
 class User extends Model {
@@ -7,6 +8,7 @@ class User extends Model {
   declare role: string;
   declare email: string;
   declare password: string;
+  declare isValidPassword: (password: string) => Promise<Error | boolean>;
 }
 
 User.init({
@@ -39,6 +41,19 @@ User.init({
   sequelize: db,
   tableName: 'users',
   timestamps: false,
+  hooks: {
+    async beforeCreate(user) {
+      const userModel = user;
+      if (userModel.password) {
+        const hashPassword = await bcrypt.hash(user.password, 10);
+        userModel.password = hashPassword;
+      }
+    },
+  },
 });
+
+User.prototype.isValidPassword = (
+  password,
+): Promise<Error | boolean> => bcrypt.compare(password, User.prototype.password);
 
 export default User;
