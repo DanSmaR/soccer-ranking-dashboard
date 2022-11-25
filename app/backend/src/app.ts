@@ -1,12 +1,17 @@
 import * as express from 'express';
+// import morgan from 'morgan';
+import Controller from './utils/interfaces/controller.interface';
+import ErrorMiddleware from './middleware/error.middleware';
 
 class App {
   public app: express.Express;
 
-  constructor() {
+  constructor(controllers: Controller[]) {
     this.app = express();
 
     this.config();
+    this.initializeControllers(controllers);
+    this.initializeErrorHandling();
 
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
@@ -19,13 +24,23 @@ class App {
       res.header('Access-Control-Allow-Headers', '*');
       next();
     };
-
-    this.app.use(express.json());
     this.app.use(accessControl);
+    // this.app.use(morgan('dev'));
+    this.app.use(express.json());
   }
 
   public start(PORT: string | number):void {
     this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+  }
+
+  private initializeControllers(controllers: Controller[]): void {
+    controllers.forEach((controller) => {
+      this.app.use('/', controller.router);
+    });
+  }
+
+  private initializeErrorHandling(): void {
+    this.app.use(ErrorMiddleware);
   }
 }
 
