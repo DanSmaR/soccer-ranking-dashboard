@@ -18,7 +18,7 @@ export default class UserService implements IUserService {
     }
     const user = await this.user.findOne({ email });
     if (!await isValidUser(user)) {
-      throw new HttpException(StatusCodes.BAD_REQUEST, 'Incorrect email or password');
+      throw new HttpException(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
     }
     return createToken(user as IUser);
   }

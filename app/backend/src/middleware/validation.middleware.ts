@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import Joi = require('joi');
+import * as Joi from 'joi';
 import HttpException from '../utils/exceptions/http.exception';
 
 function validationMiddleware(schema: Joi.Schema): RequestHandler {
