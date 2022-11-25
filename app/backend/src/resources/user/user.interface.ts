@@ -6,4 +6,5 @@ export default interface IUser {
   role: string;
   email: string;
   password: string;
+  isValidPassword(password: string, hash: string): Promise<boolean>;
 }

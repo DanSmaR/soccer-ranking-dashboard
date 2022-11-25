@@ -8,7 +8,7 @@ class User extends Model {
   declare role: string;
   declare email: string;
   declare password: string;
-  declare isValidPassword: (password: string) => Promise<Error | boolean>;
+  declare isValidPassword: (password: string, hash: string) => Promise<boolean>;
 }
 
 User.init({
@@ -52,8 +52,9 @@ User.init({
   },
 });
 
-User.prototype.isValidPassword = (
+User.prototype.isValidPassword = async (
   password,
-): Promise<Error | boolean> => bcrypt.compare(password, User.prototype.password);
+  hash,
+): Promise<boolean> => bcrypt.compare(password, hash);
 
 export default User;

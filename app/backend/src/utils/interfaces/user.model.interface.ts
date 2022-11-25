@@ -1,7 +1,7 @@
 import IUser from '../../resources/user/user.interface';
 
 export default interface IUserModel {
-  findOne(query: Partial<IUser>): Promise<IUser>;
+  findOne(query: Partial<IUser>): Promise<IUser | null>;
   create(user: IUser): Promise<IUser>;
-  isValidPassword(password: string): Promise<Error | boolean>;
+  // isValidUser(email:string, password: string): Promise<boolean>;
 }

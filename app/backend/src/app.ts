@@ -1,5 +1,5 @@
 import * as express from 'express';
-// import morgan from 'morgan';
+import * as morgan from 'morgan';
 import Controller from './utils/interfaces/controller.interface';
 import ErrorMiddleware from './middleware/error.middleware';
 
@@ -25,7 +25,7 @@ class App {
       next();
     };
     this.app.use(accessControl);
-    // this.app.use(morgan('dev'));
+    this.app.use(morgan('dev'));
     this.app.use(express.json());
   }
 
