@@ -1,4 +1,4 @@
-import IUser from '../../resources/user/user.interface';
+import IUser from '../../../resources/user/user.interface';
 
 export default interface IUserModel {
   findOne(query: Partial<IUser>): Promise<IUser | null>;

@@ -1,3 +1,4 @@
+import 'express-async-errors';
 import * as express from 'express';
 import * as morgan from 'morgan';
 import Controller from './utils/interfaces/controller.interface';

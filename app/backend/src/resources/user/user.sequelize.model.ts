@@ -1,4 +1,4 @@
-import IUserModel from '../../utils/interfaces/user.model.interface';
+import IUserModel from '../../utils/interfaces/user/user.model.interface';
 import UserModel from '../../database/models/UserModel';
 import IUser from './user.interface';
 
