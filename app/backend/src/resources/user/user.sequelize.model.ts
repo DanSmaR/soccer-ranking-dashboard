@@ -12,4 +12,8 @@ export default class UserSequelizeAdapter implements IUserModel {
   public create(user: Omit<IUser, 'id' | 'isValidPassword'>): Promise<IUser> {
     return this.user.create(user);
   }
+
+  public findById(id: number): Promise<Omit<IUser, 'password'> | null> {
+    return this.user.findByPk(id, { attributes: { exclude: ['password'] } });
+  }
 }
