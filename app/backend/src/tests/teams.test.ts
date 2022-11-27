@@ -3,7 +3,7 @@ import * as chai from 'chai';
 import 'dotenv/config';
 // @ts-ignore
 
-import chaiHttp from 'chai-http';
+import chaiHttp = require('chai-http');
 import TeamController from '../resources/team/team.controller';
 import App from '../app';
 import TeamModel from '../database/models/TeamModel';
@@ -35,6 +35,6 @@ describe('Testing the teams route', () => {
       .request(app)
       .get('/teams');
     expect(chaiHttpResponse.status).to.be.equal(200);
-    expect(chaiHttpResponse.body).to.be.equal(teamsList);
+    expect(chaiHttpResponse.body).to.be.deep.equal(teamsList);
   });
 });
