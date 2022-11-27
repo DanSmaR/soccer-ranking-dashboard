@@ -7,7 +7,6 @@ import App from '../app';
 import MatchModel from '../database/models/MatchModel';
 import allMatches, { TeamNames } from './mocks/allMatches';
 import { Response } from 'superagent';
-import Team from '../database/models/TeamModel';
 
 chai.use(chaiHttp);
 
