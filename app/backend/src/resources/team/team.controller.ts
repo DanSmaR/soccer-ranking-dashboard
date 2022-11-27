@@ -15,15 +15,25 @@ export default class TeamController implements IController {
   }
 
   private initializeRoutes(): void {
-    this.router.get(this.path, this.getTeams);
+    this.router.get(this.path, this.getTeamsHandler);
+    this.router.get(`${this.path}/:id`, this.getSingleTeamHandler);
   }
 
-  private getTeams = async (
+  private getTeamsHandler = async (
     _req: Request,
     res: Response,
     _next: NextFunction,
   ): Promise<Response | void> => {
     const teams = await this.teamService.getTeams();
     res.status(200).json(teams);
+  };
+
+  private getSingleTeamHandler = async (
+    req: Request,
+    res: Response,
+    _next: NextFunction,
+  ): Promise<Response | void> => {
+    const team = await this.teamService.getSingleTeam(Number(req.params.id));
+    res.status(200).json(team);
   };
 }

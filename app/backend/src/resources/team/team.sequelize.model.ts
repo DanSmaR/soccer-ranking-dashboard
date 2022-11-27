@@ -8,4 +8,8 @@ export default class TeamSequelizeAdapter implements ITeamModel {
   public findAll(): Promise<ITeam[]> {
     return this.team.findAll();
   }
+
+  public findById(id: number): Promise<ITeam | null> {
+    return this.team.findByPk(id);
+  }
 }
