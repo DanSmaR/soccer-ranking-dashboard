@@ -41,9 +41,6 @@ export default class UserController implements IController {
     res: Response,
     _next: NextFunction,
   ): Response | void => {
-    if (!req.body.user) {
-      throw new HttpException(StatusCodes.NOT_FOUND, 'No logged in user');
-    }
     res.status(200).json({ role: req.body.user.role });
   };
 }
