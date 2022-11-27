@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import HttpException from '../../utils/exceptions/http.exception';
+// import HttpException from '../../utils/exceptions/http.exception';
 import authenticateMiddleware from '../../middleware/authentication.middleware';
 import validationMiddleware from '../../middleware/validation.middleware';
 import { IController, ILoginData, ILoginService } from '../../utils/interfaces';
