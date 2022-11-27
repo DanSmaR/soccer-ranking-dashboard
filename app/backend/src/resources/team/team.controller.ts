@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction, } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 // import { StatusCodes } from 'http-status-codes';
 // import HttpException from '../../utils/exceptions/http.exception';
 import { IController } from '../../utils/interfaces';

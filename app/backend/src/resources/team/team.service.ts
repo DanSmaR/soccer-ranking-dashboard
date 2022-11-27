@@ -6,7 +6,7 @@ import ITeam from './team.interface';
 export default class TeamService implements ITeamService {
   constructor(private team: ITeamModel = new TeamSequelizeAdapter()) {}
 
-  public async getTeams(): Promise<ITeam[] | Error> {
+  public async getTeams(): Promise<ITeam[]> {
     const teams = this.team.findAll();
     return teams;
   }
