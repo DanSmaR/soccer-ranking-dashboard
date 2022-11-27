@@ -19,7 +19,7 @@ const { expect } = chai;
 
 let chaiHttpResponse: Response;
 
-describe('Testing the teams route', () => {
+describe('Testing the "/teams" GET route', () => {
   beforeEach(async () => {
     sinon
       .stub(TeamModel, 'findAll')
@@ -36,5 +36,25 @@ describe('Testing the teams route', () => {
       .get('/teams');
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.deep.equal(teamsList);
+  });
+});
+
+describe('Testing the "/teams/:id" GET route', () => {
+  beforeEach(async () => {
+    sinon
+      .stub(TeamModel, 'findByPk')
+      .resolves(teamsList[0] as TeamModel)
+  });
+
+  afterEach(() => {
+    (TeamModel.findByPk as sinon.SinonStub).restore();
+  });
+
+  it('should return a single team from database based on the id param', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/teams/1');
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.deep.equal(teamsList[0]);
   });
 });
