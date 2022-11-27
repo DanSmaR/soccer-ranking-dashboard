@@ -19,7 +19,7 @@ const { expect } = chai;
 
 let chaiHttpResponse: Response;
 
-describe('Testing the login route', () => {
+describe('Testing the "/login" POST route', () => {
   /**
    * Exemplo do uso de stubs com tipos
    */
@@ -80,7 +80,7 @@ describe('Testing the login route', () => {
   });
 });
 
-describe('Testing the login route, but with no user returned from database', () => {
+describe('Testing the "/login" POST route, but with no user returned from database', () => {
   beforeEach(async () => {
     sinon
       .stub(UserModel, "findOne")
@@ -104,7 +104,7 @@ describe('Testing the login route, but with no user returned from database', () 
   });
 });
 
-describe('Testing the login route, sending an incorrect password', () => {
+describe('Testing the "/login" POST route, sending an incorrect password', () => {
   beforeEach(async () => {
     sinon
       .stub(UserModel, "findOne")
@@ -135,7 +135,7 @@ describe('Testing the login route, sending an incorrect password', () => {
   });
 });
 
-describe('Testing the login/validate route, sending correct token', () => {
+describe('Testing the "/login/validate" GET route, sending a correct token', () => {
   beforeEach(async () => {
     sinon
       .stub(UserModel, "findOne")
@@ -184,7 +184,7 @@ describe('Testing the login/validate route, sending correct token', () => {
   });
 });
 
-describe('Testing the login/validate route, sending no token', () => {
+describe('Testing the "/login/validate" GET route, sending no token', () => {
   it('should return unauthorized status and "Invalid Token" message', async () => {
     chaiHttpResponse = await chai
       .request(app)
@@ -194,7 +194,7 @@ describe('Testing the login/validate route, sending no token', () => {
   });
 });
 
-describe('Testing the login/validate route, sending incorrect token', () => {
+describe('Testing the "/login/validate" GET route, sending incorrect token', () => {
   it('should return unauthorized status and "Invalid Token" message', async () => {
     chaiHttpResponse = await chai
       .request(app)
