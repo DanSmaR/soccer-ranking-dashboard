@@ -1,7 +1,9 @@
 import * as jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import { IToken } from './interfaces';
+import { StatusCodes } from 'http-status-codes';
+// import { IToken } from './interfaces';
 import IUser from '../resources/user/user.interface';
+import HttpException from './exceptions/http.exception';
 
 export const createToken = (user: IUser): string => jwt.sign(
   { id: user.id },
@@ -9,15 +11,16 @@ export const createToken = (user: IUser): string => jwt.sign(
   { expiresIn: '1d', algorithm: 'HS256' },
 );
 
-export const verifyToken = async (
+export const verifyToken = (
   token: string,
-): Promise<jwt.VerifyErrors | IToken> => new Promise((resolve, reject) => {
-  jwt.verify(
-    token,
-    process.env.JWT_SECRET as jwt.Secret,
-    (err, payload) => {
-      if (err) return reject(err);
-      resolve(payload as IToken);
-    },
-  );
-});
+): jwt.JwtPayload => {
+  try {
+    const payload = jwt.verify(
+      token,
+      process.env.JWT_SECRET as jwt.Secret,
+    ) as jwt.JwtPayload;
+    return payload;
+  } catch (error) {
+    throw new HttpException(StatusCodes.UNAUTHORIZED, 'Invalid Token');
+  }
+};
