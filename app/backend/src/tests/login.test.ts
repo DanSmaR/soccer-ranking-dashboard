@@ -37,7 +37,7 @@ describe('Testing the login route', () => {
       } as UserModel);
   });
 
-  afterEach(()=>{
+  afterEach(() => {
     (UserModel.findOne as sinon.SinonStub).restore();
   });
 

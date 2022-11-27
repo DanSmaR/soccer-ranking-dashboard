@@ -41,7 +41,7 @@ Team.init({
 
 Team.hasMany(Match, { foreignKey: 'homeTeam', as: 'homeMatches', onDelete: 'CASCADE' });
 Team.hasMany(Match, { foreignKey: 'awayTeam', as: 'awayMatches', onDelete: 'CASCADE' });
-Match.belongsTo(Team, { foreignKey: 'homeTeam', as: 'homeTeam', onDelete: 'CASCADE' });
-Match.belongsTo(Team, { foreignKey: 'awayTeam', as: 'awayTeam', onDelete: 'CASCADE' });
+Match.belongsTo(Team, { foreignKey: 'homeTeam', as: 'home', onDelete: 'CASCADE' });
+Match.belongsTo(Team, { foreignKey: 'awayTeam', as: 'away', onDelete: 'CASCADE' });
 
 export default Team;
