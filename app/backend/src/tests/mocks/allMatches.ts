@@ -31,9 +31,4 @@ const allMatches = [
   }
 ];
 
-export interface TeamNames {
-  teamHome: Omit<Team, 'id'>;
-  teamAway: Omit<Team, 'id'>;
-}
-
 export default allMatches;

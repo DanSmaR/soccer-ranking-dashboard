@@ -5,7 +5,8 @@ import chaiHttp = require('chai-http');
 import MatchController from '../resources/match/match.controller';
 import App from '../app';
 import MatchModel from '../database/models/MatchModel';
-import allMatches, { TeamNames } from './mocks/allMatches';
+import TeamNames from '../utils/interfaces/match/match.teamNames.type'
+import allMatches from './mocks/allMatches';
 import { Response } from 'superagent';
 
 chai.use(chaiHttp);
