@@ -17,7 +17,7 @@ export default class MatchService implements IMatchService {
     return this.match.create(newMatch);
   }
 
-  public async updateMatchProgress(id: number): Promise<number | Error> {
+  public async finishMatch(id: number): Promise<number | Error> {
     const [affectedRows] = await this.match.update(id);
     if (!affectedRows) {
       throw new HttpException(
