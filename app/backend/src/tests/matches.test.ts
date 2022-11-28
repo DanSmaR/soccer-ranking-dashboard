@@ -9,7 +9,7 @@ import App from '../app';
 import MatchModel from '../database/models/MatchModel';
 import UserModel from '../database/models/UserModel';
 import TeamNames from '../utils/interfaces/match/match.teamNames.type'
-import allMatches, { createdMatch, matchToCreate } from './mocks/allMatches';
+import allMatches, { createdMatch, matchToCreate, sameTeamsMatchToCreate } from './mocks/allMatches';
 import user, { userWithPasswordOmitted } from './mocks/user';
 
 chai.use(chaiHttp);
@@ -80,7 +80,7 @@ describe('Testing the "/matches?inProgress=false" GET route', () => {
   });
 });
 
-describe('Testing the "/matches POST route', () => {
+describe('Testing the "/matches route', () => {
   describe('with the correct token in the request header', async () => {
     async function login() {
       chaiHttpResponse = await chai
@@ -109,25 +109,39 @@ describe('Testing the "/matches POST route', () => {
       (UserModel.findByPk as sinon.SinonStub).restore();
     });
   
-    it('should return a new created match with "inProgress" field set to "true" when sending the correct match data', async () => {
-      const token = await login();
+    describe('POST HTTP method "/matches" route', () => {
+      it('should return a new created match with "inProgress" field set to "true" when sending the correct match data', async () => {
+        const token = await login();
+  
+        sinon
+          .stub(MatchModel, 'create')
+          .resolves(createdMatch as MatchModel);
+  
+        chaiHttpResponse = await chai
+          .request(app)
+          .post('/matches')
+          .set('Authorization', token)
+          .send(matchToCreate);
+        expect(chaiHttpResponse.status).to.be.equal(201);
+        expect(chaiHttpResponse.body).to.be.deep.equal(createdMatch);
+  
+        (MatchModel.create as sinon.SinonStub).restore();
+      });
 
-      sinon
-        .stub(MatchModel, 'create')
-        .resolves(createdMatch as MatchModel);
-
-      chaiHttpResponse = await chai
-        .request(app)
-        .post('/matches')
-        .set('Authorization', token)
-        .send(matchToCreate);
-      expect(chaiHttpResponse.status).to.be.equal(201);
-      expect(chaiHttpResponse.body).to.be.deep.equal(createdMatch);
-
-      (MatchModel.create as sinon.SinonStub).restore();
+      it('should return a Error message: "It is not possible to create a match with two equal teams" when sending a new match with two equal teams', async () => {
+        const token = await login();
+  
+        chaiHttpResponse = await chai
+          .request(app)
+          .post('/matches')
+          .set('Authorization', token)
+          .send(sameTeamsMatchToCreate);
+        expect(chaiHttpResponse.status).to.be.equal(422);
+        expect(chaiHttpResponse.body.message).to.be.equal('It is not possible to create a match with two equal teams');
+      });
     });
 
-    describe('Testing the "/matches/:id/finish" PATCH route', () => {
+    describe('Testing the "/matches/:id/finish" PATCH HTTP method route', () => {
       it('should return a message with content "Finished" when sending a valid "id" match and the match been in progress yet', async() => {
         const token = await login();
   
