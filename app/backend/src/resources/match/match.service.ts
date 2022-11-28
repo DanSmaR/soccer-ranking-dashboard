@@ -10,4 +10,8 @@ export default class MatchService implements IMatchService {
   public getMatches(inProgress: InProgress): Promise<IMatch[]> {
     return this.match.findAll(inProgress);
   }
+
+  public createMatch(newMatch: Omit<IMatch, 'id' | 'inProgress'>): Promise<IMatch> {
+    return this.match.create(newMatch);
+  }
 }
