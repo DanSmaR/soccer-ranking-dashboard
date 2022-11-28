@@ -4,16 +4,17 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import { Response } from 'superagent';
 import MatchController from '../resources/match/match.controller';
+import UserController from '../resources/user/user.controller';
 import App from '../app';
 import MatchModel from '../database/models/MatchModel';
 import UserModel from '../database/models/UserModel';
 import TeamNames from '../utils/interfaces/match/match.teamNames.type'
 import allMatches, { createdMatch, matchToCreate } from './mocks/allMatches';
-import user, { userWithNoPassword } from './mocks/user';
+import user, { userWithPasswordOmitted } from './mocks/user';
 
 chai.use(chaiHttp);
 
-const { app } = new App([new MatchController()]);
+const { app } = new App([new UserController() ,new MatchController()]);
 
 const { expect } = chai;
 
@@ -100,7 +101,7 @@ describe('Testing the "/matches POST route', () => {
         .resolves(user as UserModel);
       sinon
         .stub(UserModel, 'findByPk')
-        .resolves(userWithNoPassword as UserModel);
+        .resolves(userWithPasswordOmitted as UserModel);
     });
   
     afterEach(() => {

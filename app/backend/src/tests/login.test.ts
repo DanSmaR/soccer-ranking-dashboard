@@ -8,7 +8,7 @@ import { Response } from 'superagent';
 import UserController from '../resources/user/user.controller';
 import App from '../app';
 import UserModel from '../database/models/UserModel';
-import user, { userWithNoPassword } from './mocks/user';
+import user, { userWithPasswordOmitted, userWithInvalidPassword } from './mocks/user';
 
 chai.use(chaiHttp);
 
@@ -100,14 +100,14 @@ describe('Testing the "/login" POST route, sending an incorrect password', () =>
   beforeEach(async () => {
     sinon
       .stub(UserModel, "findOne")
-      .resolves(user as UserModel);
+      .resolves(userWithInvalidPassword as UserModel);
   });
 
   afterEach(()=>{
     (UserModel.findOne as sinon.SinonStub).restore();
   });
 
-  it('should return unauthorized status if an incorrect email is provided', async () => {
+  it('should return unauthorized status if an incorrect password is provided', async () => {
     chaiHttpResponse = await chai
       .request(app)
       .post('/login')
@@ -128,7 +128,7 @@ describe('Testing the "/login/validate" GET route, sending a correct token', () 
 
     sinon
       .stub(UserModel, 'findByPk')
-      .resolves(userWithNoPassword as UserModel)
+      .resolves(userWithPasswordOmitted as UserModel)
   });
 
   afterEach(()=>{
