@@ -13,7 +13,13 @@ export default class MatchService implements IMatchService {
     return this.match.findAll(inProgress);
   }
 
-  public createMatch(newMatch: Omit<IMatch, 'id' | 'inProgress'>): Promise<IMatch> {
+  public createMatch(newMatch: Omit<IMatch, 'id' | 'inProgress'>): Promise<IMatch | Error> {
+    if (newMatch.awayTeam === newMatch.homeTeam) {
+      throw new HttpException(
+        StatusCodes.UNPROCESSABLE_ENTITY,
+        'It is not possible to create a match with two equal teams',
+      );
+    }
     return this.match.create(newMatch);
   }
 
