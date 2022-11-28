@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import InProgress from '../../utils/interfaces/match/match.inProgress.type';
 import { IController } from '../../utils/interfaces';
 import IMatchService from '../../utils/interfaces/match/match.service.interface';
 
@@ -16,7 +17,7 @@ export default class MatchController implements IController {
   }
 
   private getMatchesHandler = async (
-    req: Request<{ inProgress: 'true' | 'false' | undefined }>,
+    req: Request<{ inProgress: InProgress }>,
     res: Response,
   ): Promise<Response | void> => {
     const { inProgress } = req.params;

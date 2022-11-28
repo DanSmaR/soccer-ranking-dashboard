@@ -1,7 +1,6 @@
 import IMatch from '../../../resources/match/match.interface';
-
-type inProgressOptions = 'true' | 'false' | undefined;
+import InProgress from './match.inProgress.type';
 
 export default interface IMatchService {
-  getMatches(inProgress: inProgressOptions): Promise<IMatch[]>;
+  getMatches(inProgress: InProgress): Promise<IMatch[]>;
 }
