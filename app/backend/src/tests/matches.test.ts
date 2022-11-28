@@ -51,7 +51,7 @@ describe('Testing the "/matches?inProgress=true" GET route', () => {
   it('should return all matches which are in progress from database', async () => {
     chaiHttpResponse = await chai
       .request(app)
-      .get('/matches');
+      .get('/matches?inProgress=true');
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.deep.equal([allMatches[1]]);
   });
@@ -71,7 +71,7 @@ describe('Testing the "/matches?inProgress=false" GET route', () => {
   it('should return all matches which are finished from database', async () => {
     chaiHttpResponse = await chai
       .request(app)
-      .get('/matches');
+      .get('/matches?inProgress=false');
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.deep.equal([allMatches[0]]);
   });

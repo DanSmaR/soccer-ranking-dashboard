@@ -3,12 +3,13 @@ import { StatusCodes } from 'http-status-codes';
 import InProgress from '../../utils/interfaces/match/match.inProgress.type';
 import { IController } from '../../utils/interfaces';
 import IMatchService from '../../utils/interfaces/match/match.service.interface';
+import MatchService from './match.service';
 
 export default class MatchController implements IController {
   public path = '/matches';
   public router = Router();
 
-  constructor(private matchService: IMatchService) {
+  constructor(private matchService: IMatchService = new MatchService()) {
     this.initializeRoutes();
   }
 
@@ -17,10 +18,10 @@ export default class MatchController implements IController {
   }
 
   private getMatchesHandler = async (
-    req: Request<{ inProgress: InProgress }>,
+    req: Request<unknown, unknown, unknown, { inProgress: InProgress }>,
     res: Response,
   ): Promise<Response | void> => {
-    const { inProgress } = req.params;
+    const { inProgress } = req.query;
     const matches = await this.matchService.getMatches(inProgress);
     res.status(StatusCodes.OK).json(matches);
   };
