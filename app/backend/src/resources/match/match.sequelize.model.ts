@@ -25,4 +25,8 @@ export default class MatchSequelizeAdapter implements IMatchModel {
 
     return matches;
   }
+
+  public create(newMatch: Omit<IMatch, 'id' | 'inProgress'>): Promise<IMatch> {
+    return this.match.create(newMatch);
+  }
 }
