@@ -7,11 +7,19 @@ import TeamService from './team.service';
 import ITeamService from '../../utils/interfaces/team/team.service.interface';
 
 export default class TeamController implements IController {
-  public path = '/teams';
-  public router = Router();
+  private _path = '/teams';
+  private _router = Router();
 
   constructor(private teamService: ITeamService = new TeamService()) {
     this.initializeRoutes();
+  }
+
+  get path() {
+    return this._path;
+  }
+
+  get router() {
+    return this._router;
   }
 
   private initializeRoutes(): void {

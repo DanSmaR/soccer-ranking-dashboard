@@ -10,11 +10,19 @@ import loginSchema from './user.validation';
 import IUser from './user.interface';
 
 export default class UserController implements IController {
-  public path = '/login';
-  public router = Router();
+  private _path = '/login';
+  private _router = Router();
 
   constructor(private loginService: ILoginService = new UserService()) {
     this.initializeRoutes();
+  }
+
+  get path() {
+    return this._path;
+  }
+
+  get router() {
+    return this._router;
   }
 
   private initializeRoutes(): void {

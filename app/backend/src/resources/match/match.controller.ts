@@ -6,11 +6,19 @@ import IMatchService from '../../utils/interfaces/match/match.service.interface'
 import MatchService from './match.service';
 
 export default class MatchController implements IController {
-  public path = '/matches';
-  public router = Router();
+  private _path = '/matches';
+  private _router = Router();
 
   constructor(private matchService: IMatchService = new MatchService()) {
     this.initializeRoutes();
+  }
+
+  get path() {
+    return this._path;
+  }
+
+  get router() {
+    return this._router;
   }
 
   private initializeRoutes(): void {
