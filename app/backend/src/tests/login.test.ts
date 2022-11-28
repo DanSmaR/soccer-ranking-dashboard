@@ -4,12 +4,11 @@ import * as jwt from 'jsonwebtoken';
 import 'dotenv/config';
 // @ts-ignore
 import chaiHttp = require('chai-http');
+import { Response } from 'superagent';
 import UserController from '../resources/user/user.controller';
-
 import App from '../app';
 import UserModel from '../database/models/UserModel';
-
-import { Response } from 'superagent';
+import user, { userWithNoPassword } from './mocks/user';
 
 chai.use(chaiHttp);
 
@@ -27,14 +26,7 @@ describe('Testing the "/login" POST route', () => {
   beforeEach(async () => {
     sinon
       .stub(UserModel, "findOne")
-      .resolves({
-        id: 1,
-        username: 'Admin',
-        role: 'admin',
-        email: 'admin@admin.com',
-        password: 'hash_string',
-        isValidPassword : (password: string, hash: string) => Promise.resolve(true),
-      } as UserModel);
+      .resolves(user as UserModel);
   });
 
   afterEach(() => {
@@ -108,14 +100,7 @@ describe('Testing the "/login" POST route, sending an incorrect password', () =>
   beforeEach(async () => {
     sinon
       .stub(UserModel, "findOne")
-      .resolves({
-        id: 1,
-        username: 'Admin',
-        role: 'admin',
-        email: 'admin@admin.com',
-        password: 'hash_string',
-        isValidPassword : (password: string, hash: string) => Promise.resolve(false),
-      } as UserModel);
+      .resolves(user as UserModel);
   });
 
   afterEach(()=>{
@@ -139,24 +124,11 @@ describe('Testing the "/login/validate" GET route, sending a correct token', () 
   beforeEach(async () => {
     sinon
       .stub(UserModel, "findOne")
-      .resolves({
-        id: 1,
-        username: 'Admin',
-        role: 'admin',
-        email: 'admin@admin.com',
-        password: 'hash_string',
-        isValidPassword : (password: string, hash: string) => Promise.resolve(true),
-      } as UserModel);
+      .resolves(user as UserModel);
 
     sinon
       .stub(UserModel, 'findByPk')
-      .resolves({
-        id: 1,
-        username: 'Admin',
-        role: 'admin',
-        email: 'admin@admin.com',
-        isValidPassword : (password: string, hash: string) => Promise.resolve(true),
-      } as UserModel)
+      .resolves(userWithNoPassword as UserModel)
   });
 
   afterEach(()=>{
