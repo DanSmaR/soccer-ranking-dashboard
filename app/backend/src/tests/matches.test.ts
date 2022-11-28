@@ -2,12 +2,14 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
+import { Response } from 'superagent';
 import MatchController from '../resources/match/match.controller';
 import App from '../app';
 import MatchModel from '../database/models/MatchModel';
+import UserModel from '../database/models/UserModel';
 import TeamNames from '../utils/interfaces/match/match.teamNames.type'
-import allMatches from './mocks/allMatches';
-import { Response } from 'superagent';
+import allMatches, { createdMatch, matchToCreate } from './mocks/allMatches';
+import user, { userWithNoPassword } from './mocks/user';
 
 chai.use(chaiHttp);
 
@@ -74,5 +76,52 @@ describe('Testing the "/matches?inProgress=false" GET route', () => {
       .get('/matches?inProgress=false');
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.deep.equal([allMatches[0]]);
+  });
+});
+
+describe('Testing the "/matches POST route', () => {
+  describe('with the correct token in the request header', async () => {
+    async function makeLogin() {
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send({
+          email: 'admin@admin.com',
+          password: 'secret_admin'
+        });
+          
+      const { token } = chaiHttpResponse.body as Record<string, string>;
+      return token;
+    }
+
+    beforeEach(async () => {
+      sinon
+        .stub(UserModel, "findOne")
+        .resolves(user as UserModel);
+      sinon
+        .stub(UserModel, 'findByPk')
+        .resolves(userWithNoPassword as UserModel);
+    });
+  
+    afterEach(() => {
+      (UserModel.findOne as sinon.SinonStub).restore();
+      (UserModel.findByPk as sinon.SinonStub).restore();
+      (MatchModel.create as sinon.SinonStub).restore();
+    });
+  
+    it('should return a new created match with "inProgress" field set to "true" when sending the correct match data', async () => {
+      const token = await makeLogin();
+      sinon
+        .stub(MatchModel, 'create')
+        .resolves(createdMatch as MatchModel);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches')
+        .set('Authorization', token)
+        .send(matchToCreate);
+      expect(chaiHttpResponse.status).to.be.equal(201);
+      expect(chaiHttpResponse.body).to.be.deep.equal(createdMatch);
+    });
   });
 });
