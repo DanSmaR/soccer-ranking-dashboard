@@ -7,6 +7,7 @@ import MatchService from './match.service';
 import IMatch from './match.interface';
 import authenticateMiddleware from '../../middleware/authentication.middleware';
 import UserSequelizeAdapter from '../user/user.sequelize.model';
+import HttpException from '../../utils/exceptions/http.exception';
 
 export default class MatchController implements IController {
   private _path = '/matches';
@@ -31,6 +32,11 @@ export default class MatchController implements IController {
       authenticateMiddleware(new UserSequelizeAdapter()),
       this.createMatchHandler,
     );
+    this.router.patch(
+      `${this.path}/:id/finish`,
+      authenticateMiddleware(new UserSequelizeAdapter()),
+      this.finishMatchHandler,
+    );
   }
 
   private getMatchesHandler = async (
@@ -48,5 +54,17 @@ export default class MatchController implements IController {
   ): Promise<Response | void> => {
     const match = await this.matchService.createMatch(req.body);
     res.status(StatusCodes.CREATED).json(match);
+  };
+
+  private finishMatchHandler = async (
+    req: Request<{ id: string }>,
+    res: Response,
+  ): Promise<Response | void> => {
+    const { id } = req.params;
+    if (!Number(id)) {
+      throw new HttpException(StatusCodes.BAD_REQUEST, 'Invalid id');
+    }
+    await this.matchService.finishMatch(Number(id));
+    res.status(StatusCodes.OK).json({ message: 'Finished' });
   };
 }
