@@ -107,8 +107,6 @@ describe('Testing the "/matches POST route', () => {
     afterEach(() => {
       (UserModel.findOne as sinon.SinonStub).restore();
       (UserModel.findByPk as sinon.SinonStub).restore();
-      (MatchModel.create as sinon.SinonStub).restore();
-      (MatchModel.update as sinon.SinonStub).restore();
     });
   
     it('should return a new created match with "inProgress" field set to "true" when sending the correct match data', async () => {
@@ -125,23 +123,27 @@ describe('Testing the "/matches POST route', () => {
         .send(matchToCreate);
       expect(chaiHttpResponse.status).to.be.equal(201);
       expect(chaiHttpResponse.body).to.be.deep.equal(createdMatch);
+
+      (MatchModel.create as sinon.SinonStub).restore();
     });
 
     describe('Testing the "/matches/:id/finish" PATCH route', () => {
       it('should return a message with content "Finished" when sending a valid "id" match and the match been in progress yet', async() => {
         const token = await login();
-
+  
         sinon
           .stub(MatchModel, 'update')
           .resolves([1]);
-
+  
         chaiHttpResponse = await chai
           .request(app)
-          .patch('matches/41/finish')
+          .patch('/matches/41/finish')
           .set('Authorization', token);
-
+  
         expect(chaiHttpResponse.status).to.be.equal(200);
         expect(chaiHttpResponse.body.message).to.be.equal('Finished');
+  
+        (MatchModel.update as sinon.SinonStub).restore();
       });
     });
   });
