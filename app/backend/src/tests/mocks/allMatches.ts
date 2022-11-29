@@ -54,4 +54,11 @@ export const sameTeamsMatchToCreate = {
   awayTeamGoals: 2,
 }
 
+export const matchWithNonExistentTeams = {
+  homeTeam: 90,
+  homeTeamGoals: 2,
+  awayTeam: 0,
+  awayTeamGoals: 2,
+}
+
 export default allMatches;

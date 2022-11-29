@@ -8,8 +8,9 @@ import UserController from '../resources/user/user.controller';
 import App from '../app';
 import MatchModel from '../database/models/MatchModel';
 import UserModel from '../database/models/UserModel';
+import TeamModel from '../database/models/TeamModel';
 import TeamNames from '../utils/interfaces/match/match.teamNames.type'
-import allMatches, { createdMatch, matchToCreate, sameTeamsMatchToCreate } from './mocks/allMatches';
+import allMatches, { createdMatch, matchToCreate, matchWithNonExistentTeams, sameTeamsMatchToCreate } from './mocks/allMatches';
 import user, { userWithPasswordOmitted } from './mocks/user';
 
 chai.use(chaiHttp);
@@ -122,6 +123,7 @@ describe('Testing the "/matches route', () => {
           .post('/matches')
           .set('Authorization', token)
           .send(matchToCreate);
+
         expect(chaiHttpResponse.status).to.be.equal(201);
         expect(chaiHttpResponse.body).to.be.deep.equal(createdMatch);
   
@@ -136,8 +138,28 @@ describe('Testing the "/matches route', () => {
           .post('/matches')
           .set('Authorization', token)
           .send(sameTeamsMatchToCreate);
+
         expect(chaiHttpResponse.status).to.be.equal(422);
         expect(chaiHttpResponse.body.message).to.be.equal('It is not possible to create a match with two equal teams');
+      });
+
+      it('should return a Error message: "There is no team with such id!" when sending a new match with at least one team not present in database', async () => {
+        const token = await login();
+        
+        sinon
+          .stub(TeamModel, 'findByPk')
+          .resolves(null);
+        
+        chaiHttpResponse = await chai
+          .request(app)
+          .post('/matches')
+          .set('Authorization', token)
+          .send(matchWithNonExistentTeams);
+
+        expect(chaiHttpResponse.status).to.be.equal(404);
+        expect(chaiHttpResponse.body.message).to.be.equal('There is no team with such id!');
+
+        (TeamModel.findByPk as sinon.SinonStub).restore();
       });
     });
 
