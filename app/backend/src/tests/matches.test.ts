@@ -187,4 +187,17 @@ describe('Testing the "/matches route', () => {
       });
     });
   });
+
+  describe('with an invalid token in the request header', () => {
+    it('should return an Error message: "Token must be a valid token"', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches')
+        .set('Authorization', 'invalid_token')
+        .send(matchToCreate);
+
+      expect(chaiHttpResponse.status).to.be.equal(401);
+      expect(chaiHttpResponse.body.message).to.be.equal('Token must be a valid token');
+    });
+  });
 });

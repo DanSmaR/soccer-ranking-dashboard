@@ -162,17 +162,17 @@ describe('Testing the "/login/validate" GET route, sending no token', () => {
       .request(app)
       .get('/login/validate');
     expect(chaiHttpResponse.status).to.be.equal(401);
-    expect(chaiHttpResponse.body.message).to.be.equal('Invalid Token');
+    expect(chaiHttpResponse.body.message).to.be.equal('Token must be a valid token');
   });
 });
 
 describe('Testing the "/login/validate" GET route, sending incorrect token', () => {
-  it('should return unauthorized status and "Invalid Token" message', async () => {
+  it('should return unauthorized status and "Token must be a valid token" message', async () => {
     chaiHttpResponse = await chai
       .request(app)
       .get('/login/validate')
       .set('Authorization', 'invalid_token');
     expect(chaiHttpResponse.status).to.be.equal(401);
-    expect(chaiHttpResponse.body.message).to.be.equal('Invalid Token');
+    expect(chaiHttpResponse.body.message).to.be.equal('Token must be a valid token');
   });
 });
