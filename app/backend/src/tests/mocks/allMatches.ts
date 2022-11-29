@@ -57,7 +57,7 @@ export const sameTeamsMatchToCreate = {
 export const matchWithNonExistentTeams = {
   homeTeam: 90,
   homeTeamGoals: 2,
-  awayTeam: 0,
+  awayTeam: 2,
   awayTeamGoals: 2,
 }
 

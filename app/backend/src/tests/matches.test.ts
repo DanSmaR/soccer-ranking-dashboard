@@ -12,6 +12,7 @@ import TeamModel from '../database/models/TeamModel';
 import TeamNames from '../utils/interfaces/match/match.teamNames.type'
 import allMatches, { createdMatch, matchToCreate, matchWithNonExistentTeams, sameTeamsMatchToCreate } from './mocks/allMatches';
 import user, { userWithPasswordOmitted } from './mocks/user';
+import teamsList from './mocks/teams';
 
 chai.use(chaiHttp);
 
@@ -148,7 +149,10 @@ describe('Testing the "/matches route', () => {
         
         sinon
           .stub(TeamModel, 'findByPk')
-          .resolves(null);
+          .onFirstCall()
+          .resolves(null)
+          .onSecondCall()
+          .resolves(teamsList[1] as TeamModel);
         
         chaiHttpResponse = await chai
           .request(app)
