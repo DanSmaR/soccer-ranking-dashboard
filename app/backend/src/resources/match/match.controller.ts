@@ -8,6 +8,8 @@ import IMatch from './match.interface';
 import authenticateMiddleware from '../../middleware/authentication.middleware';
 import UserSequelizeAdapter from '../user/user.sequelize.model';
 import HttpException from '../../utils/exceptions/http.exception';
+import verifyTeamMiddleware from '../../middleware/verifyTeam.middleware';
+import TeamSequelizeAdapter from '../team/team.sequelize.model';
 
 export default class MatchController implements IController {
   private _path = '/matches';
@@ -30,6 +32,7 @@ export default class MatchController implements IController {
     this.router.post(
       this.path,
       authenticateMiddleware(new UserSequelizeAdapter()),
+      verifyTeamMiddleware(new TeamSequelizeAdapter()),
       this.createMatchHandler,
     );
     this.router.patch(

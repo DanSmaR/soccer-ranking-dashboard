@@ -3,7 +3,6 @@ import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { verifyToken } from '../utils/token';
 import IUserModel from '../utils/interfaces/user/user.model.interface';
-// import { IToken } from '../utils/interfaces';
 import HttpException from '../utils/exceptions/http.exception';
 
 function authenticateMiddleware(userModel: IUserModel): RequestHandler {
