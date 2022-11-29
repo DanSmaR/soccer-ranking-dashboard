@@ -24,7 +24,7 @@ export default class MatchService implements IMatchService {
   }
 
   public async finishMatch(id: number): Promise<number | Error> {
-    const [affectedRows] = await this.match.update(id);
+    const [affectedRows] = await this.match.update(id, { inProgress: false });
     if (!affectedRows) {
       throw new HttpException(
         StatusCodes.BAD_REQUEST,
