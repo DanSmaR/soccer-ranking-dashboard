@@ -33,4 +33,18 @@ export default class MatchService implements IMatchService {
     }
     return affectedRows;
   }
+
+  public async updateMatchScore(
+    id: number,
+    score: Pick<IMatch, 'awayTeamGoals' | 'homeTeamGoals'>,
+  ): Promise<number | Error> {
+    const [affectedRows] = await this.match.update(id, score);
+    if (!affectedRows) {
+      throw new HttpException(
+        StatusCodes.BAD_REQUEST,
+        'Score not updated. Provide a valid id or score is already updated',
+      );
+    }
+    return affectedRows;
+  }
 }

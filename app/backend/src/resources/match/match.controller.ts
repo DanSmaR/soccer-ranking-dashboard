@@ -40,6 +40,11 @@ export default class MatchController implements IController {
       authenticateMiddleware(new UserSequelizeAdapter()),
       this.finishMatchHandler,
     );
+    this.router.patch(
+      `${this.path}/:id`,
+      authenticateMiddleware(new UserSequelizeAdapter()),
+      this.updateMatchScoreHandler,
+    );
   }
 
   private getMatchesHandler = async (
@@ -69,5 +74,17 @@ export default class MatchController implements IController {
     }
     await this.matchService.finishMatch(Number(id));
     res.status(StatusCodes.OK).json({ message: 'Finished' });
+  };
+
+  private updateMatchScoreHandler = async (
+    req: Request<{ id: string }, unknown, Pick<IMatch, 'awayTeamGoals' | 'homeTeamGoals'>>,
+    res: Response,
+  ): Promise<Response | void> => {
+    const { id } = req.params;
+    if (!Number(id)) {
+      throw new HttpException(StatusCodes.BAD_REQUEST, 'Invalid id');
+    }
+    await this.matchService.updateMatchScore(Number(id), req.body);
+    res.status(StatusCodes.OK).json({ message: 'Match score updated' });
   };
 }
