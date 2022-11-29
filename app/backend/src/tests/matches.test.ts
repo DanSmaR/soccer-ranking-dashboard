@@ -186,9 +186,29 @@ describe('Testing the "/matches route', () => {
         (MatchModel.update as sinon.SinonStub).restore();
       });
     });
+
+    describe('Testing the "/matches/:id/" PATCH HTTP method route', () => {
+      it('should return a message: "Match score updated" when sending a object with the new teams score', async() => {
+        const token = await login();
+  
+        sinon
+          .stub(MatchModel, 'update')
+          .resolves([1]);
+  
+        chaiHttpResponse = await chai
+          .request(app)
+          .patch('/matches/41')
+          .set('Authorization', token);
+  
+        expect(chaiHttpResponse.status).to.be.equal(200);
+        expect(chaiHttpResponse.body.message).to.be.equal('Match score updated');
+  
+        (MatchModel.update as sinon.SinonStub).restore();
+      });
+    });
   });
 
-  describe('with an invalid token in the request header', () => {
+  describe('With an invalid token in the request header', () => {
     it('should return an Error message: "Token must be a valid token"', async () => {
       chaiHttpResponse = await chai
         .request(app)
