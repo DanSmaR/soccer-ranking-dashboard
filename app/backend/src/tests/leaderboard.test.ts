@@ -15,7 +15,7 @@ import TeamModel from '../database/models/TeamModel';
 import TeamNames from '../utils/interfaces/match/match.teamNames.type'
 import allMatches, { createdMatch, matchToCreate, matchWithNonExistentTeams, sameTeamsMatchToCreate } from './mocks/allMatches';
 import user, { userWithPasswordOmitted } from './mocks/user';
-import homeLeaderBoard from './mocks/leaderboard';
+import homeLeaderBoard, { awayLeaderboard } from './mocks/leaderboard';
 
 chai.use(chaiHttp);
 
@@ -26,17 +26,17 @@ const { expect } = chai;
 let chaiHttpResponse: Response;
 
 describe('Testing the "/leaderboard" endpoint', () => {
-  beforeEach(async () => {
-    sinon
-      .stub(sequelize, 'query')
-      .resolves(homeLeaderBoard as unknown as [unknown[], unknown]);
-  });
-
   afterEach(() => {
     (sequelize.query as sinon.SinonStub).restore();
   });
 
   describe('Testing the "/leaderboard/home" GET HTTP endpoint', () => {
+    beforeEach(async () => {
+      sinon
+        .stub(sequelize, 'query')
+        .resolves(homeLeaderBoard as unknown as [unknown[], unknown]);
+    });
+
     it('should return the home teams classification based on database data and finished matches', async () => {
       chaiHttpResponse = await chai
         .request(app)
@@ -44,6 +44,23 @@ describe('Testing the "/leaderboard" endpoint', () => {
 
       expect(chaiHttpResponse.status).to.be.equal(200);
       expect(chaiHttpResponse.body).to.be.deep.equal(homeLeaderBoard);
+    });
+  });
+
+  describe('Testing the "/leaderboard/away" GET HTTP endpoint', () => {
+    beforeEach(async () => {
+      sinon
+        .stub(sequelize, 'query')
+        .resolves(awayLeaderboard as unknown as [unknown[], unknown]);
+    });
+
+    it('should return the away teams classification based on database data and finished matches', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .get('/leaderboard/away');
+
+      expect(chaiHttpResponse.status).to.be.equal(200);
+      expect(chaiHttpResponse.body).to.be.deep.equal(awayLeaderboard);
     });
   });
 });
