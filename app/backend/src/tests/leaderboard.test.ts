@@ -15,7 +15,7 @@ import TeamModel from '../database/models/TeamModel';
 import TeamNames from '../utils/interfaces/match/match.teamNames.type'
 import allMatches, { createdMatch, matchToCreate, matchWithNonExistentTeams, sameTeamsMatchToCreate } from './mocks/allMatches';
 import user, { userWithPasswordOmitted } from './mocks/user';
-import leaderBoard from './mocks/leaderboard';
+import homeLeaderBoard from './mocks/leaderboard';
 
 chai.use(chaiHttp);
 
@@ -29,7 +29,7 @@ describe('Testing the "/leaderboard" endpoint', () => {
   beforeEach(async () => {
     sinon
       .stub(sequelize, 'query')
-      .resolves(leaderBoard as unknown as [unknown[], unknown]);
+      .resolves(homeLeaderBoard as unknown as [unknown[], unknown]);
   });
 
   afterEach(() => {
@@ -43,7 +43,7 @@ describe('Testing the "/leaderboard" endpoint', () => {
         .get('/leaderboard/home');
 
       expect(chaiHttpResponse.status).to.be.equal(200);
-      expect(chaiHttpResponse.body).to.be.deep.equal(leaderBoard);
+      expect(chaiHttpResponse.body).to.be.deep.equal(homeLeaderBoard);
     });
   });
 });
