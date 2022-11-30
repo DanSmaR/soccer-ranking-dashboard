@@ -5,6 +5,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import { Response } from 'superagent';
 import MatchController from '../resources/match/match.controller';
+import LeaderBoardController from '../resources/leaderboard/leaderboard.controller';
 import UserController from '../resources/user/user.controller';
 import App from '../app';
 import sequelize from '../database/models';
@@ -18,7 +19,7 @@ import leaderBoard from './mocks/leaderboard';
 
 chai.use(chaiHttp);
 
-const { app } = new App([new UserController() ,new MatchController()]);
+const { app } = new App([new UserController() ,new MatchController(), new LeaderBoardController()]);
 
 const { expect } = chai;
 
@@ -39,7 +40,7 @@ describe('Testing the "/leaderboard" endpoint', () => {
     it('should return the home teams classification based on database data and finished matches', async () => {
       chaiHttpResponse = await chai
         .request(app)
-        .get('leaderboard/home');
+        .get('/leaderboard/home');
 
       expect(chaiHttpResponse.status).to.be.equal(200);
       expect(chaiHttpResponse.body).to.be.deep.equal(leaderBoard);
