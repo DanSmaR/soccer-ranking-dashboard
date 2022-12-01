@@ -12,24 +12,24 @@ interface ITeamMatchSequelize {
 export default class MatchSequelizeAdapter implements IMatchModel {
   private match = MatchModel;
 
-  public async findAll(
-    inProgress: InProgress = 'all',
-  ): Promise<(ITeamMatch & IMatch)[]> {
-    const option = {
+  public async findAll(inProgress: InProgress = 'all'): Promise<(ITeamMatch & IMatch)[]> {
+    const filter = {
       true: { inProgress: { [Op.eq]: true } },
       false: { inProgress: { [Op.eq]: false } },
       all: undefined,
     };
-
     const matches = await this.match.findAll({
-      where: option[inProgress as Exclude<InProgress, undefined>],
+      where: filter[inProgress as Exclude<InProgress, undefined>],
       include: [
         { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
         { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
       ],
     }) as unknown as (ITeamMatchSequelize & MatchModel)[];
-
-    return matches;
+    return matches.map((match) => ({
+      ...match.dataValues,
+      teamHome: { ...match.teamHome.dataValues },
+      teamAway: { ...match.teamAway.dataValues },
+    }));
   }
 
   public create(newMatch: Omit<IMatch, 'id' | 'inProgress'>): Promise<IMatch> {
