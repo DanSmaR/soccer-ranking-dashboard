@@ -15,7 +15,7 @@ import TeamModel from '../database/models/TeamModel';
 import TeamNames from '../utils/interfaces/match/match.teamNames.type'
 import allMatches, { createdMatch, matchToCreate, matchWithNonExistentTeams, sameTeamsMatchToCreate } from './mocks/allMatches';
 import user, { userWithPasswordOmitted } from './mocks/user';
-import homeLeaderBoard, { awayLeaderboard } from './mocks/leaderboard';
+import homeLeaderBoard, { awayLeaderboard, generalLeaderBoard } from './mocks/leaderboard';
 
 chai.use(chaiHttp);
 
@@ -61,6 +61,23 @@ describe('Testing the "/leaderboard" endpoint', () => {
 
       expect(chaiHttpResponse.status).to.be.equal(200);
       expect(chaiHttpResponse.body).to.be.deep.equal(awayLeaderboard);
+    });
+  });
+
+  describe('Testing the "/leaderboard" GET HTTP endpoint', () => {
+    beforeEach(async () => {
+      sinon
+        .stub(sequelize, 'query')
+        .resolves(generalLeaderBoard as unknown as [unknown[], unknown]);
+    });
+
+    it('should return the general teams classification based on database data and finished matches', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .get('/leaderboard');
+
+      expect(chaiHttpResponse.status).to.be.equal(200);
+      expect(chaiHttpResponse.body).to.be.deep.equal(generalLeaderBoard);
     });
   });
 });
