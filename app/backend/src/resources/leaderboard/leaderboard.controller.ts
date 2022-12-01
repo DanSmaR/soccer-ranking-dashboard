@@ -24,6 +24,7 @@ export default class LeaderBoardController implements IController {
   private initializeRoutes(): void {
     this.router.get(`${this.path}/home`, this.getLeaderBoardHandler);
     this.router.get(`${this.path}/away`, this.getLeaderBoardHandler);
+    this.router.get(this.path, this.getLeaderBoardHandler);
   }
 
   private getLeaderBoardHandler = async (
