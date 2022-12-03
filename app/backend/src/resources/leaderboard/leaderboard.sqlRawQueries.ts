@@ -34,7 +34,7 @@ function getPrimaryStatsByTeamTypeSQLQuery(teamType: 'away_team' | 'home_team') 
   `;
 }
 
-function getAllStatsByTeamTypeSQLQuery(teamType: 'away_team' | 'home_team') {
+function getSecondaryStatsByTeamTypeSQLQuery(teamType: 'away_team' | 'home_team') {
   return `
     SELECT *,
       (totalVictories * 3) + totalDraws AS totalPoints,
@@ -51,7 +51,7 @@ function getLeaderBoardByTeamTypeSQLQuery(teamType: 'away_team' | 'home_team') {
       totalDraws, totalLosses, goalsFavor, goalsOwn, goalsBalance,
       ROUND((totalPoints / (totalGames * 3)) * 100, 2) AS efficiency
     FROM (
-      ${getAllStatsByTeamTypeSQLQuery(teamType)}
+      ${getSecondaryStatsByTeamTypeSQLQuery(teamType)}
     ) AS t2
     ${leaderBoardOrderBySQLQuery}
   `;

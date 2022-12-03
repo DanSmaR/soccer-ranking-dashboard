@@ -32,7 +32,6 @@ export default class LeaderBoardController implements IController {
     res: Response,
   ): Promise<Response | void> => {
     const teamType = req.url.split('/')[2] as TeamType;
-    console.log(teamType);
     const homeLeaderBoard = await this.leaderBoardService.getLeaderBoard(teamType);
     res.status(StatusCodes.OK).json(homeLeaderBoard);
   };
