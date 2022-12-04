@@ -1,9 +1,8 @@
 import { Request, Response, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import ILeaderBoardService from '../../utils/interfaces/leaderboard/leaderboard.service.interface';
 import { IController } from '../../utils/interfaces';
 import LeaderBoardService from './leaderboard.service';
-import TeamType from '../../utils/interfaces/leaderboard/match.teamType.type';
+import { TeamType, ILeaderBoardService } from '../../utils/interfaces/leaderboard';
 
 export default class LeaderBoardController implements IController {
   private _path = '/leaderboard';

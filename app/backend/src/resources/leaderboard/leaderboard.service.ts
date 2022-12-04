@@ -1,5 +1,5 @@
-import TeamType from '../../utils/interfaces/leaderboard/match.teamType.type';
-import { ILeaderBoardModel, ILeaderBoardService } from '../../utils/interfaces/leaderboard';
+import { ILeaderBoardModel, ILeaderBoardService,
+  TeamType } from '../../utils/interfaces/leaderboard';
 import ILeaderBoard from './leaderboard.interface';
 import LeaderBoardSequelizeAdapter from './leaderboard.sequelize.model';
 

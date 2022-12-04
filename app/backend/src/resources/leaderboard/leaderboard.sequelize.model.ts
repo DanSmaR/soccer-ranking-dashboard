@@ -1,8 +1,7 @@
 import { QueryTypes } from 'sequelize';
 import sequelize from '../../database/models';
 import ILeaderBoard from './leaderboard.interface';
-import { ILeaderBoardModel } from '../../utils/interfaces/leaderboard';
-import TeamType from '../../utils/interfaces/leaderboard/match.teamType.type';
+import { ILeaderBoardModel, TeamType } from '../../utils/interfaces/leaderboard';
 import leaderBoardSQLQuery from './leaderboard.sqlRawQueries';
 
 export default class LeaderBoardSequelizeAdapter implements ILeaderBoardModel {
