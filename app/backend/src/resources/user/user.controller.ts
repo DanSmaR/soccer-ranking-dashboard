@@ -1,7 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { authenticateMiddleware, validationMiddleware } from '../../middleware';
-import { IController, ILoginData, ILoginService } from '../../utils/interfaces';
+import { IController } from '../../utils/interfaces';
+import { ILoginData, IUserService } from '../../utils/interfaces/user';
 import UserSequelizeAdapter from './user.sequelize.model';
 import UserService from './user.service';
 import loginSchema from './user.validation';
@@ -11,7 +12,7 @@ export default class UserController implements IController {
   private _path = '/login';
   private _router = Router();
 
-  constructor(private loginService: ILoginService = new UserService()) {
+  constructor(private loginService: IUserService = new UserService()) {
     this.initializeRoutes();
   }
 

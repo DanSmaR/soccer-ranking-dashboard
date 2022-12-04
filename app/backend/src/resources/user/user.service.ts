@@ -1,7 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
-import IUserService from '../../utils/interfaces/user/user.service.interface';
+import { IUserService, IUserModel } from '../../utils/interfaces/user';
 import { createToken } from '../../utils/token';
-import IUserModel from '../../utils/interfaces/user/user.model.interface';
 import UserSequelizeAdapter from './user.sequelize.model';
 import HttpException from '../../utils/exceptions/http.exception';
 import IUser from './user.interface';
