@@ -18,18 +18,13 @@ export default class MatchSequelizeAdapter implements IMatchModel {
       false: { inProgress: { [Op.eq]: false } },
       all: undefined,
     };
-    const matches = await this.match.findAll({
+    return this.match.findAll({
       where: filter[inProgress as Exclude<InProgress, undefined>],
       include: [
         { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
         { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
       ],
     }) as unknown as (ITeamMatchSequelize & MatchModel)[];
-    return matches.map((match) => ({
-      ...match.dataValues,
-      teamHome: { ...match.teamHome.dataValues },
-      teamAway: { ...match.teamAway.dataValues },
-    }));
   }
 
   public create(newMatch: Omit<IMatch, 'id' | 'inProgress'>): Promise<IMatch> {
