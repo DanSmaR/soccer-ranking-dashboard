@@ -5,10 +5,9 @@ import { IController } from '../../utils/interfaces';
 import IMatchService from '../../utils/interfaces/match/match.service.interface';
 import MatchService from './match.service';
 import IMatch from './match.interface';
-import authenticateMiddleware from '../../middleware/authentication.middleware';
 import UserSequelizeAdapter from '../user/user.sequelize.model';
 import HttpException from '../../utils/exceptions/http.exception';
-import verifyTeamMiddleware from '../../middleware/verifyTeam.middleware';
+import { authenticateMiddleware, verifyTeamMiddleware } from '../../middleware';
 import TeamSequelizeAdapter from '../team/team.sequelize.model';
 
 export default class MatchController implements IController {

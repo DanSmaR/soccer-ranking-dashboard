@@ -1,9 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
-// import { StatusCodes } from 'http-status-codes';
-// import HttpException from '../../utils/exceptions/http.exception';
 import { IController } from '../../utils/interfaces';
 import TeamService from './team.service';
-// import ITeam from './team.interface';
 import ITeamService from '../../utils/interfaces/team/team.service.interface';
 
 export default class TeamController implements IController {
