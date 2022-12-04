@@ -1,8 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
-import IMatchService from '../../utils/interfaces/match/match.service.interface';
-import IMatchModel from '../../utils/interfaces/match/match.model.interface';
+import { IMatchService, IMatchModel, InProgress } from '../../utils/interfaces/match';
 import IMatch, { ITeamMatch } from './match.interface';
-import InProgress from '../../utils/interfaces/match/match.inProgress.type';
 import MatchSequelizeAdapter from './match.sequelize.model';
 import HttpException from '../../utils/exceptions/http.exception';
 

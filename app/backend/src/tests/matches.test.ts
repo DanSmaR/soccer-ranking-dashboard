@@ -9,7 +9,7 @@ import App from '../app';
 import MatchModel from '../database/models/MatchModel';
 import UserModel from '../database/models/UserModel';
 import TeamModel from '../database/models/TeamModel';
-import TeamNames from '../utils/interfaces/match/match.teamNames.type'
+import { TeamNames } from '../utils/interfaces/match'
 import allMatches, { createdMatch, matchToCreate, matchWithNonExistentTeams, sameTeamsMatchToCreate } from './mocks/allMatches';
 import user, { userWithPasswordOmitted } from './mocks/user';
 import teamsList from './mocks/teams';

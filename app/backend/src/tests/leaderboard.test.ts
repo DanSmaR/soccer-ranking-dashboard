@@ -9,12 +9,6 @@ import LeaderBoardController from '../resources/leaderboard/leaderboard.controll
 import UserController from '../resources/user/user.controller';
 import App from '../app';
 import sequelize from '../database/models';
-import MatchModel from '../database/models/MatchModel';
-import UserModel from '../database/models/UserModel';
-import TeamModel from '../database/models/TeamModel';
-import TeamNames from '../utils/interfaces/match/match.teamNames.type'
-import allMatches, { createdMatch, matchToCreate, matchWithNonExistentTeams, sameTeamsMatchToCreate } from './mocks/allMatches';
-import user, { userWithPasswordOmitted } from './mocks/user';
 import homeLeaderBoard, { awayLeaderboard, generalLeaderBoard } from './mocks/leaderboard';
 
 chai.use(chaiHttp);

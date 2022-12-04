@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import IMatch, { ITeamMatch } from './match.interface';
 import IMatchModel from '../../utils/interfaces/match/match.model.interface';
 import MatchModel from '../../database/models/MatchModel';
-import InProgress from '../../utils/interfaces/match/match.inProgress.type';
+import { InProgress } from '../../utils/interfaces/match';
 import Team from '../../database/models/TeamModel';
 
 interface ITeamMatchSequelize {

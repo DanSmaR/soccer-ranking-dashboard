@@ -1,8 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import InProgress from '../../utils/interfaces/match/match.inProgress.type';
+import { InProgress, IMatchService } from '../../utils/interfaces/match';
 import { IController } from '../../utils/interfaces';
-import IMatchService from '../../utils/interfaces/match/match.service.interface';
 import MatchService from './match.service';
 import IMatch from './match.interface';
 import UserSequelizeAdapter from '../user/user.sequelize.model';
