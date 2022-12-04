@@ -1,6 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import ITeamService from '../../utils/interfaces/team/team.service.interface';
-import ITeamModel from '../../utils/interfaces/team/team.model.interface';
+import { ITeamService, ITeamModel } from '../../utils/interfaces/team';
 import TeamSequelizeAdapter from './team.sequelize.model';
 import ITeam from './team.interface';
 import HttpException from '../../utils/exceptions/http.exception';

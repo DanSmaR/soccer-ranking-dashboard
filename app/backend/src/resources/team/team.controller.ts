@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { IController } from '../../utils/interfaces';
 import TeamService from './team.service';
-import ITeamService from '../../utils/interfaces/team/team.service.interface';
+import { ITeamService } from '../../utils/interfaces/team';
 
 export default class TeamController implements IController {
   private _path = '/teams';
