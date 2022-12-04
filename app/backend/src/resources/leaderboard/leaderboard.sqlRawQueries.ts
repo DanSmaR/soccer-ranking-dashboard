@@ -1,18 +1,17 @@
-const generalLeaderBoardColumnsSQLQuery = `
-  SELECT name,
-    SUM(totalPoints) AS totalPoints,
-    SUM(totalGames) AS totalGames,
-    SUM(totalVictories) AS totalVictories,
-    SUM(totalDraws) AS totalDraws,
-    SUM(totalLosses) AS totalLosses,
-    SUM(goalsFavor) AS goalsFavor,
-    SUM(goalsOwn) AS goalsOwn,
-    SUM(goalsBalance) AS goalsBalance,
-    ROUND((SUM(totalPoints) / (SUM(totalGames) * 3)) * 100, 2) AS efficiency
+const secondaryStatsColumnsSQLQuery = `
+  *,
+    (totalVictories * 3) + totalDraws AS totalPoints,
+    goalsFavor - goalsOwn AS goalsBalance
+`;
+
+const leaderBoardColumnsSQLQuery = `
+  name, totalPoints, totalGames, totalVictories,
+    totalDraws, totalLosses, goalsFavor, goalsOwn, goalsBalance,
+    ROUND((totalPoints / (totalGames * 3)) * 100, 2) AS efficiency
 `;
 
 const leaderBoardOrderBySQLQuery = `
-  ORDER BY totalPoints DESC, totalVictories DESC,
+  totalPoints DESC, totalVictories DESC,
     goalsBalance DESC, goalsFavor DESC,
     goalsOwn ASC
 `;
@@ -36,37 +35,52 @@ function getPrimaryStatsByTeamTypeSQLQuery(teamType: 'away_team' | 'home_team') 
 
 function getSecondaryStatsByTeamTypeSQLQuery(teamType: 'away_team' | 'home_team') {
   return `
-    SELECT *,
-      (totalVictories * 3) + totalDraws AS totalPoints,
-      goalsFavor - goalsOwn AS goalsBalance
+    SELECT ${secondaryStatsColumnsSQLQuery}
     FROM (
       ${getPrimaryStatsByTeamTypeSQLQuery(teamType)}
     ) AS t1
   `;
 }
 
+function getGeneralSecondaryStatsSQLQuery() {
+  return `
+    SELECT ${secondaryStatsColumnsSQLQuery}
+    FROM (
+      SELECT name,
+        SUM(totalGames) AS totalGames,
+        SUM(totalVictories) AS totalVictories,
+        SUM(totalDraws) AS totalDraws,
+        SUM(totalLosses) AS totalLosses,
+        SUM(goalsFavor) AS goalsFavor,
+        SUM(goalsOwn) AS goalsOwn
+      FROM (
+        (${getPrimaryStatsByTeamTypeSQLQuery('home_team')})
+        UNION ALL
+        (${getPrimaryStatsByTeamTypeSQLQuery('away_team')})
+      ) AS t1
+      GROUP BY name
+    ) AS t2
+  `;
+}
+
 function getLeaderBoardByTeamTypeSQLQuery(teamType: 'away_team' | 'home_team') {
   return `
-    SELECT name, totalPoints, totalGames, totalVictories,
-      totalDraws, totalLosses, goalsFavor, goalsOwn, goalsBalance,
-      ROUND((totalPoints / (totalGames * 3)) * 100, 2) AS efficiency
+    SELECT ${leaderBoardColumnsSQLQuery}
     FROM (
       ${getSecondaryStatsByTeamTypeSQLQuery(teamType)}
     ) AS t2
-    ${leaderBoardOrderBySQLQuery}
+    ORDER BY ${leaderBoardOrderBySQLQuery}
   `;
 }
 
 function getGeneralLeaderBoardSQLQuery() {
   return `
-    ${generalLeaderBoardColumnsSQLQuery}  
+    SELECT ${leaderBoardColumnsSQLQuery}  
     FROM (
-      (${getLeaderBoardByTeamTypeSQLQuery('home_team')})
-      UNION ALL
-      (${getLeaderBoardByTeamTypeSQLQuery('away_team')})
-    ) AS t
+      ${getGeneralSecondaryStatsSQLQuery()}
+    ) AS t3
     GROUP BY name
-    ${leaderBoardOrderBySQLQuery};
+    ORDER BY ${leaderBoardOrderBySQLQuery};
   `;
 }
 
